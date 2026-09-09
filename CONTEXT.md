@@ -30,3 +30,6 @@
 - `2026-09-09` typo "guidlines" in docs/releasing.md — proposed
 - `2026-09-09` dead link to nhsuk-prototype-kit-package/issues/644 in lib/express-settings/query-parser.js (correct issue is in nhsuk/nhsuk-prototype-kit) — proposed
 - `2026-09-09` wrong JSDoc param description in lib/nunjucks-filters/log.js ("the NHS number to format" copy-paste) — proposed
+
+## Run 2026-09-09 (trivial-fix pass)
+- pr-opened: fork PR #7 (fix-typos-and-doc-cleanup) — 3 genuine fixes: "guidlines"→"guidelines" (docs/releasing.md), "nestee"→"nested" (auto-routes.test.js), wrong JSDoc param in log.js. Verified locally (178 tests pass, tsc/eslint pass). Fork Actions disabled, no fork CI. Note: query-parser.js issue #644 link was already correct (points to nhsuk/nhsuk-prototype-kit) — NOT a fix.
