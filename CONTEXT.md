@@ -1,5 +1,5 @@
 # nhsuk/nhsuk-prototype-kit-package context
-> refreshed 2026-09-30 | upstream default: main @ 68ee38e
+> refreshed 2026-10-02 | upstream default: main @ 68ee38e (unchanged since 2026-09-30)
 
 ## Identity & policies
 - upstream: nhsuk/nhsuk-prototype-kit-package, default branch main, primary language JavaScript, English-first yes (all docs/comments in English)
@@ -27,11 +27,13 @@
 ## Issue-area health
 - open issues are mostly Frankie's filter feature requests (#331, #304, #293, #292, #291) — avoid re-picking those
 - no open issue about format-postcode correctness; the partial-postcode bug is a self-found gap
+- 2026-10-02: no maintainer-engaged, unclaimed, non-feature open issue survives (open issues are Frankie's filter requests #331/#304/#293/#292/#291 plus open-ended enhancements #397/#392/#384/#289/#288/#251/#214/#182/#169/#222/#221/#59 and assigned #219/#223) — used the repo-audit self-found path
 
 ## Gap ledger (dedupe — READ FIRST, never re-pick)
 - `2026-08-26` issue #330 (formatTime filter) — pr-opened (fork PR #1, feat/format-time-filter) — upstream then merged its own add-format-time-filter (#383), so #1 is now redundant
 - `2026-09-09` trivial pass — pr-opened (fork PR #7, fix-typos-and-doc-cleanup) — 3 genuine fixes
 - `2026-09-30` self-found bug: formatPostcode mangles partial postcodes — pr-opened (fork PR #15, fix-format-postcode)
+- `2026-10-02` self-found packaging gap: published npm tarball includes the CommonJS test lib/index.test.cjs — pr-opened (fork PR #16, fix-published-test-files)
 - `2026-09-27` and `2026-09-29` engine/run.sh exited 1 with no trace for this repo — logged as engine-failure rows in tried-repos.jsonl
 
 ## Mined gaps (discovered, not yet attempted)
@@ -39,6 +41,11 @@
 - `2026-09-09` dead link to nhsuk-prototype-kit-package/issues/644 in lib/express-settings/query-parser.js — dropped (link was already correct)
 - `2026-09-09` wrong JSDoc param in lib/nunjucks-filters/log.js — attempted (PR #7)
 - `2026-09-30` formatPostcode mangles partial postcodes ("M1" -> " M1", "SW1A" -> "S W1A") — attempted (PR #15)
+- `2026-10-02` package.json "files" only excluded lib/**/*.test.js, so lib/index.test.cjs is published in the npm tarball — attempted (PR #16)
+- `2026-10-02` lib/views/500.html renders the error message with `nl2br | nl2br`, which doubles every line break (nunjucks replaces each newline with `<br />`) — discovered, not attempted (present since #84, intent unclear)
 
 ## Run 2026-09-30 (bug-fix pass)
 - pr-opened: fork PR #15 (fix-format-postcode) — self-found bug in lib/nunjucks-filters/format-postcode.js: the regex made the inward code optional, so a partial postcode passed the format check and was then split 3 characters from the end ("M1" -> " M1" with a leading space; "SW1A" -> "S W1A"). Fix requires both the outward and inward codes, so a partial postcode is returned unchanged. Reproduced the bug on upstream main @ 68ee38e before fixing. Added 2 tests (upper + lower case partial postcodes). Verified locally on Node 24.21.0: npm test 220 pass / 0 fail; npm run lint green (tsc + eslint + prettier). Dedupe: no upstream issue and no open/closed PR fixes this; the only postcode PR is #248 (added the filter). Fork CI: Actions were off for this fork (0 runs ever) — enabled them, then a close/reopen of the PR triggered Tests + Code style checks, both green (runs 36736587305 / 36736587252).
+
+## Run 2026-10-02 (repo-audit self-found pass)
+- pr-opened: fork PR #16 (fix-published-test-files) — self-found packaging gap in package.json. The `"files"` exclusion added in #94 (Fixes #93) only matched `!lib/**/*.test.js`, so the co-located CommonJS test `lib/index.test.cjs` (added later in #148) was included in the published npm tarball. Reproduced on upstream main @ 68ee38e: `npm pack --dry-run` listed `lib/index.test.cjs` (3.8 kB) while every `.test.js` file was excluded. Fix: change the pattern to `!lib/**/*.test.{js,cjs}`. After the fix `npm pack --dry-run` reports 56 files with no test artifacts; `lib/index.cjs` and `lib/index.js` are still present. Dedupe: `gh search issues/prs` for npm pack / test.cjs / tarball / files publish returned nothing; no upstream or fork PR touches this. Verified locally on Node 24.21.0 (npx node@24): npm test 218 pass / 0 fail; npm run lint green (tsc + eslint + prettier). Fork CI on PR #16: Tests (Node 22 + 24) and Code style checks all green; mergeStateStatus CLEAN. PR body uses the pipeline 3-section fallback (repo has no PR template; nhsuk/.github 404). de-ai-text gate script could not run (skills/de-ai-text/rules/tells.json missing), so the body was checked manually for AI mentions (clean).
