@@ -1,5 +1,5 @@
 # nhsuk/nhsuk-prototype-kit-package context
-> refreshed 2026-10-02 | upstream default: main @ 68ee38e (unchanged since 2026-09-30)
+> refreshed 2026-10-03 | upstream default: main @ 68ee38e (unchanged since 2026-09-30)
 
 ## Identity & policies
 - upstream: nhsuk/nhsuk-prototype-kit-package, default branch main, primary language JavaScript, English-first yes (all docs/comments in English)
@@ -34,6 +34,7 @@
 - `2026-09-09` trivial pass — pr-opened (fork PR #7, fix-typos-and-doc-cleanup) — 3 genuine fixes
 - `2026-09-30` self-found bug: formatPostcode mangles partial postcodes — pr-opened (fork PR #15, fix-format-postcode)
 - `2026-10-02` self-found packaging gap: published npm tarball includes the CommonJS test lib/index.test.cjs — pr-opened (fork PR #16, fix-published-test-files)
+- `2026-10-03` trivial pass (docs links + typos) — pr-opened (fork PR #17, fix-docs-links-and-typos) — 4 genuine fixes
 - `2026-09-27` and `2026-09-29` engine/run.sh exited 1 with no trace for this repo — logged as engine-failure rows in tried-repos.jsonl
 
 ## Mined gaps (discovered, not yet attempted)
@@ -49,3 +50,6 @@
 
 ## Run 2026-10-02 (repo-audit self-found pass)
 - pr-opened: fork PR #16 (fix-published-test-files) — self-found packaging gap in package.json. The `"files"` exclusion added in #94 (Fixes #93) only matched `!lib/**/*.test.js`, so the co-located CommonJS test `lib/index.test.cjs` (added later in #148) was included in the published npm tarball. Reproduced on upstream main @ 68ee38e: `npm pack --dry-run` listed `lib/index.test.cjs` (3.8 kB) while every `.test.js` file was excluded. Fix: change the pattern to `!lib/**/*.test.{js,cjs}`. After the fix `npm pack --dry-run` reports 56 files with no test artifacts; `lib/index.cjs` and `lib/index.js` are still present. Dedupe: `gh search issues/prs` for npm pack / test.cjs / tarball / files publish returned nothing; no upstream or fork PR touches this. Verified locally on Node 24.21.0 (npx node@24): npm test 218 pass / 0 fail; npm run lint green (tsc + eslint + prettier). Fork CI on PR #16: Tests (Node 22 + 24) and Code style checks all green; mergeStateStatus CLEAN. PR body uses the pipeline 3-section fallback (repo has no PR template; nhsuk/.github 404). de-ai-text gate script could not run (skills/de-ai-text/rules/tells.json missing), so the body was checked manually for AI mentions (clean).
+
+## Run 2026-10-03 (trivial-fix pass, engine/loop-trivial.sh)
+- pr-opened: fork PR #17 (fix-docs-links-and-typos) — 4 genuine, meaning-preserving fixes across 4 files (+7/-7): (1) README.md:3 broken sentence "the NHS prototype kit is distributed..." -> "...the NHS prototype kit, which is distributed..."; (2) SECURITY.md:24 and :34 invalid link `[cybersecurity@nhs.net](cybersecurity@nhs.net)` -> `mailto:` target (relative path 404s; other mailto links in repo work); (3) CONTRIBUTING.md:17 stale `?template=BUG_REPORT.md` query dropped (no issue template in repo or nhsuk/.github, so query is ignored); (4) lib/middleware/redirect-post-to-get.test.js:33,41,47 removed stray leftover "adds " prefix from three it() titles (present since the test was added in #107). Exhaustive search first: cspell/typos clean apart from what PR #7 already fixed; 728 extracted URLs live-checked (all external 200; only false positives); no stale command references found. Dedupe: prior fork PRs #1/#7/#15/#16 touch different files/content. Verified locally on Node 24.21.0 (npx node@24): npm ci OK; npm test 218 pass / 0 fail; npm run lint green (tsc + eslint + prettier). Fork CI on PR #17: Tests (Node 22 + 24) and Code style checks all green. PR body uses the pipeline 3-section fallback (repo has no PR template; nhsuk/.github 404). de-ai-text gate script could not run (skills/de-ai-text/rules/tells.json missing), so the body was checked manually for AI mentions (clean).
