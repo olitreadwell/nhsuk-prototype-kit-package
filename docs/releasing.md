@@ -2,7 +2,7 @@
 
 To release a new version of the kit to npm, follow these steps:
 
-1. Update the version number, following [semantic versioning](https://semver.org) guidlines to either update the major, minor or patch number:
+1. Update the version number, following [semantic versioning](https://semver.org) guidelines to either update the major, minor or patch number:
 
 ```sh
 npm version patch --no-git-tag-version

@@ -14,7 +14,7 @@ If you’ve got an idea or suggestion you can:
 
 When raising bugs please explain the issue in good detail and provide a guide to how to replicate it.
 
-[Raise a bug](https://github.com/nhsuk/nhsuk-prototype-kit-package/issues/new?template=BUG_REPORT.md)
+[Raise a bug](https://github.com/nhsuk/nhsuk-prototype-kit-package/issues/new)
 
 ## Suggesting features
 
