@@ -1,5 +1,5 @@
 # nhsuk/nhsuk-prototype-kit-package context
-> refreshed 2026-10-03 | upstream default: main @ 68ee38e (unchanged since 2026-09-30)
+> refreshed 2026-10-11 | upstream default: main @ 9a5b653 (2026-10-06; was 68ee38e at the 2026-10-03 refresh)
 
 ## Identity & policies
 - upstream: nhsuk/nhsuk-prototype-kit-package, default branch main, primary language JavaScript, English-first yes (all docs/comments in English)
@@ -27,6 +27,7 @@
 ## Issue-area health
 - open issues are mostly Frankie's filter feature requests (#331, #304, #293, #292, #291) — avoid re-picking those
 - no open issue about format-postcode correctness; the partial-postcode bug is a self-found gap
+- 2026-10-11: same picture, re-verified live — upstream open issues are still Frankie's filter requests (#331/#304/#293/#292/#291) plus open-ended enhancements (#397/#392/#384/#289/#288/#251/#214/#182/#169/#222/#221/#59) and assigned #219/#223; upstream open PRs are still #385/#265/#264/#212 (no new outside PRs). No maintainer-engaged, unclaimed, non-feature open issue survives, so this run used the repo-audit self-found path again.
 - 2026-10-02: no maintainer-engaged, unclaimed, non-feature open issue survives (open issues are Frankie's filter requests #331/#304/#293/#292/#291 plus open-ended enhancements #397/#392/#384/#289/#288/#251/#214/#182/#169/#222/#221/#59 and assigned #219/#223) — used the repo-audit self-found path
 
 ## Gap ledger (dedupe — READ FIRST, never re-pick)
@@ -35,6 +36,7 @@
 - `2026-09-30` self-found bug: formatPostcode mangles partial postcodes — pr-opened (fork PR #15, fix-format-postcode)
 - `2026-10-02` self-found packaging gap: published npm tarball includes the CommonJS test lib/index.test.cjs — pr-opened (fork PR #16, fix-published-test-files)
 - `2026-10-03` trivial pass (docs links + typos) — pr-opened (fork PR #17, fix-docs-links-and-typos) — 4 genuine fixes
+- `2026-10-11` self-found bug: 500 error page applies the `nl2br` filter twice — pr-opened (fork PR #18, fix-error-page-line-breaks) — one-line markup fix + regression test
 - `2026-09-27` and `2026-09-29` engine/run.sh exited 1 with no trace for this repo — logged as engine-failure rows in tried-repos.jsonl
 
 ## Mined gaps (discovered, not yet attempted)
@@ -43,7 +45,7 @@
 - `2026-09-09` wrong JSDoc param in lib/nunjucks-filters/log.js — attempted (PR #7)
 - `2026-09-30` formatPostcode mangles partial postcodes ("M1" -> " M1", "SW1A" -> "S W1A") — attempted (PR #15)
 - `2026-10-02` package.json "files" only excluded lib/**/*.test.js, so lib/index.test.cjs is published in the npm tarball — attempted (PR #16)
-- `2026-10-02` lib/views/500.html renders the error message with `nl2br | nl2br`, which doubles every line break (nunjucks replaces each newline with `<br />`) — discovered, not attempted (present since #84, intent unclear)
+- `2026-10-02` lib/views/500.html renders the error message with `nl2br | nl2br`, which doubles every line break (nunjucks replaces each newline with `<br />`) — attempted (PR #18 on 2026-10-11; present since #84 and carried through #332)
 
 ## Run 2026-09-30 (bug-fix pass)
 - pr-opened: fork PR #15 (fix-format-postcode) — self-found bug in lib/nunjucks-filters/format-postcode.js: the regex made the inward code optional, so a partial postcode passed the format check and was then split 3 characters from the end ("M1" -> " M1" with a leading space; "SW1A" -> "S W1A"). Fix requires both the outward and inward codes, so a partial postcode is returned unchanged. Reproduced the bug on upstream main @ 68ee38e before fixing. Added 2 tests (upper + lower case partial postcodes). Verified locally on Node 24.21.0: npm test 220 pass / 0 fail; npm run lint green (tsc + eslint + prettier). Dedupe: no upstream issue and no open/closed PR fixes this; the only postcode PR is #248 (added the filter). Fork CI: Actions were off for this fork (0 runs ever) — enabled them, then a close/reopen of the PR triggered Tests + Code style checks, both green (runs 36736587305 / 36736587252).
@@ -53,3 +55,6 @@
 
 ## Run 2026-10-03 (trivial-fix pass, engine/loop-trivial.sh)
 - pr-opened: fork PR #17 (fix-docs-links-and-typos) — 4 genuine, meaning-preserving fixes across 4 files (+7/-7): (1) README.md:3 broken sentence "the NHS prototype kit is distributed..." -> "...the NHS prototype kit, which is distributed..."; (2) SECURITY.md:24 and :34 invalid link `[cybersecurity@nhs.net](cybersecurity@nhs.net)` -> `mailto:` target (relative path 404s; other mailto links in repo work); (3) CONTRIBUTING.md:17 stale `?template=BUG_REPORT.md` query dropped (no issue template in repo or nhsuk/.github, so query is ignored); (4) lib/middleware/redirect-post-to-get.test.js:33,41,47 removed stray leftover "adds " prefix from three it() titles (present since the test was added in #107). Exhaustive search first: cspell/typos clean apart from what PR #7 already fixed; 728 extracted URLs live-checked (all external 200; only false positives); no stale command references found. Dedupe: prior fork PRs #1/#7/#15/#16 touch different files/content. Verified locally on Node 24.21.0 (npx node@24): npm ci OK; npm test 218 pass / 0 fail; npm run lint green (tsc + eslint + prettier). Fork CI on PR #17: Tests (Node 22 + 24) and Code style checks all green. PR body uses the pipeline 3-section fallback (repo has no PR template; nhsuk/.github 404). de-ai-text gate script could not run (skills/de-ai-text/rules/tells.json missing), so the body was checked manually for AI mentions (clean).
+
+## Run 2026-10-11 (repo-audit self-found pass, engine/loop.sh)
+- pr-opened: fork PR #18 (fix-error-page-line-breaks) — self-found markup bug in lib/views/500.html. The template applied `nl2br` twice (`{{ error.message | nl2br | nl2br | safe }}`), so every newline in an error message rendered as `<br /><br />` and added a blank line between each line of the message. The duplication dates back to the original error pages (#84) and survived the error message rendering change in #332. Reproduced on upstream main @ 9a5b653 before fixing by booting the real 500 view: a two-line message rendered `Something went wrong<br /><br />\non the next line`. Fix: drop the duplicated `nl2br` (kept `| safe` — with nunjucks 3.2.4 `nl2br` returns a plain string, not safe HTML). Added a regression test in lib/middleware/render-error-page.test.js that renders the real 500 view; it fails on main (double `<br />`) and passes on the branch. Diff 2 files, +27/-1, well under limits.max_diff_lines 200. Dedupe: `gh api search/issues` for nl2br / line break / error message returns only closed #84 and closed #332; no open, closed or merged upstream PR fixes the doubled filter, and the fork gap ledger had already recorded the gap (discovered 2026-10-02, not attempted). Verified locally on Node 24.21.0 (the .nvmrc version; container default Node 20 fails the pre-existing formatTime tests): npm ci, npm test => 219 pass / 0 fail, npm run lint => green (tsc types + eslint + prettier). Fork CI on 568f1af: Javascript tests (22), Javascript tests (24) and Code style checks all completed/success. PR #18 body uses the pipeline 3-section fallback (the repo has NO PR template in any case/location and nhsuk/.github is 404) + exactly one PROMOTION NOTE + verify block. NO AI mention in the commit or the body (grep for ai/assist/generated/chatgpt/copilot/claude/llm = clean; de-ai-text gate script still unavailable because skills/de-ai-text/rules/tells.json is absent). Guards via engine/guards.sh (sourced): assert_is_fork, assert_pr_on_fork, assert_under_daily_pr_limit, assert_gfi_not_repeated all PASS. English variants respected (UK English; no dialect normalisation).
