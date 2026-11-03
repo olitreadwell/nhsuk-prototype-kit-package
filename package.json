@@ -89,7 +89,8 @@
   "files": [
     "lib",
     "!lib/**/*.test.{js,cjs}",
-    "!lib/**/test-templates"
+    "!lib/**/test-templates",
+    "!lib/**/fixtures"
   ],
   "exports": {
     ".": {

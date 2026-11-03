@@ -1,5 +1,30 @@
 # NHS prototype kit Changelog
 
+## Unreleased
+
+### :new: **New features**
+
+- Add a new `/frame` view for demonstrating prototypes within a mocked-up phone or tablet frame
+
+### :wrench: **Maintenance and fixes**
+
+- Update to use NHS.UK frontend 10.7.0
+- Dependency updates including security fixes
+- Mark the kit as compatible with Node.js 26 (LTS) and npm v12
+
+## 8.5.2 - 19 October 2026
+
+### :wrench: **Maintenance and fixes**
+
+- Bug fix: only render view paths that begin `views/`
+- Dependency updates including security fixes
+
+## 8.5.1 - 6 October 2026
+
+### :wrench: **Maintenance and fixes**
+
+- Dependency updates including security fixes
+
 ## 8.5.0 - 16 September 2026
 
 ### :new: **New features**
