@@ -21,7 +21,7 @@ If you wish to notify us of a vulnerability via email, please include detailed i
 
 You can reach us at:
 
-- [cybersecurity@nhs.net](cybersecurity@nhs.net)
+- [cybersecurity@nhs.net](mailto:cybersecurity@nhs.net)
 
 ### NCSC
 
@@ -31,4 +31,4 @@ You can report vulnerabilities here: [https://www.ncsc.gov.uk/information/vulner
 
 ## General Security Enquiries
 
-If you have general enquiries regarding our cybersecurity, please reach out to us at [cybersecurity@nhs.net](cybersecurity@nhs.net)
+If you have general enquiries regarding our cybersecurity, please reach out to us at [cybersecurity@nhs.net](mailto:cybersecurity@nhs.net)
